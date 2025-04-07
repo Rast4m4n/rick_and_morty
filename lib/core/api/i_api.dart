@@ -1,4 +1,6 @@
+import 'package:rick_and_morty/domain/models/api_response.dart';
+
 abstract class IApi {
-  String get url;
-  Future<String> get();
+  static const String baseUrl = 'https://rickandmortyapi.com/api';
+  Future<ApiResponse> getCharacter({int page = 1});
 }
