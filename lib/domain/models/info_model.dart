@@ -1,17 +1,18 @@
-class Info {
-  Info({required this.count, required this.pages, this.next, this.prev});
+import 'package:json_annotation/json_annotation.dart';
+
+part 'info_model.g.dart';
+
+@JsonSerializable()
+class InfoModel {
+  InfoModel({required this.count, required this.pages, this.next, this.prev});
 
   final int count;
   final int pages;
   final String? next;
   final String? prev;
 
-  factory Info.fromJson(Map<String, dynamic> json) {
-    return Info(
-      count: json['count'],
-      pages: json['pages'],
-      next: json['next'],
-      prev: json['prev'],
-    );
-  }
+  factory InfoModel.fromJson(Map<String, dynamic> json) =>
+      _$InfoModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$InfoModelToJson(this);
 }
