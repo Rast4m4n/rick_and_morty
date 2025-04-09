@@ -1,8 +1,11 @@
 import 'package:rick_and_morty/core/api/i_api.dart';
 import 'package:rick_and_morty/core/storage/i_data_storage.dart';
+import 'package:rick_and_morty/data/repository/character_repository.dart';
 
 abstract class IDiScope {
   Future<void> init();
-  ILocalDataStorage get localStorage;
+  IDataStorage get localStorage;
+  IDataStorage get dbStorage;
   IApi get api;
+  IRepository get iRepository;
 }

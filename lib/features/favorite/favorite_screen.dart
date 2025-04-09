@@ -1,10 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty/core/di/di_scope_provider.dart';
-import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
-import 'package:rick_and_morty/domain/models/info_model.dart';
 import 'package:rick_and_morty/features/favorite/favorite_vm.dart';
-import 'package:rick_and_morty/features/home/home_vm.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -76,7 +73,11 @@ class CharacterWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        leading: Image.network(character.image),
+        leading: CachedNetworkImage(
+          imageUrl: character.image,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
         title: Text('Имя : ${character.name}'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

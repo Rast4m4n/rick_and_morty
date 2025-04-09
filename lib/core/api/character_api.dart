@@ -7,14 +7,10 @@ class CharacterApi implements IApi {
 
   @override
   Future<ApiResponse> getCharacter({int page = 1}) async {
-    try {
-      final response = await _dio.get(
-        '${IApi.baseUrl}/character',
-        queryParameters: {'page': page},
-      );
-      return ApiResponse.fromJson(response.data);
-    } on DioException catch (e) {
-      throw Exception('Failed to load characters: ${e.message}');
-    }
+    final response = await _dio.get(
+      '${IApi.baseUrl}/character',
+      queryParameters: {'page': page},
+    );
+    return ApiResponse.fromJson(response.data);
   }
 }

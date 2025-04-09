@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty/core/api/i_api.dart';
 import 'package:rick_and_morty/core/di/di_scope_provider.dart';
+import 'package:rick_and_morty/data/repository/character_repository.dart';
 import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
 
 class HomeViewModel with ChangeNotifier {
-  HomeViewModel({required this.iApi})
-    : apiResponse = iApi.getCharacter(page: 1);
+  HomeViewModel({required this.repository})
+    : apiResponse = repository.getCharacter(page: 1);
 
   int currentPage = 1;
   Future<ApiResponse> apiResponse;
-  final IApi iApi;
+  final IRepository repository;
   List<CharacterModel> _favoriteCharacters = [];
 
   Future<void> loadFavorites(BuildContext context) async {
@@ -21,7 +21,7 @@ class HomeViewModel with ChangeNotifier {
 
   void loadPage(int page) {
     currentPage = page;
-    apiResponse = iApi.getCharacter(page: currentPage).then((response) {
+    apiResponse = repository.getCharacter(page: currentPage).then((response) {
       final updateResonse =
           response.results.map((character) {
             final isFavorite = _favoriteCharacters.any(
@@ -42,15 +42,13 @@ class HomeViewModel with ChangeNotifier {
     );
     apiResponse.results[index] = updateCharacter;
 
+    await DiScopeProvider.of(
+      context,
+    )!.iRepository.makeFavoriteOrRemoveCharacter(updateCharacter);
+
     if (updateCharacter.isFavorite) {
-      await DiScopeProvider.of(
-        context,
-      )!.localStorage.saveFavoriteCharacter(updateCharacter);
       _favoriteCharacters.add(updateCharacter);
     } else {
-      await DiScopeProvider.of(
-        context,
-      )!.localStorage.removeFavoriteCharacter(updateCharacter);
       _favoriteCharacters.removeWhere((c) => c.id == updateCharacter.id);
     }
 

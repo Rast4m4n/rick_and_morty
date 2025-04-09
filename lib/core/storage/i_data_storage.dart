@@ -1,9 +1,10 @@
+import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
 
-abstract class ILocalDataStorage {
-  Future<void> saveFavoriteCharacter(CharacterModel character);
-  Future<void> removeFavoriteCharacter(CharacterModel character);
+abstract class IDataStorage {
+  Future<void> init();
+  Future<void> makeFavoriteOrRemoveCharacter(CharacterModel character);
   Future<List<CharacterModel>> loadFavoriteCharacter();
-  Future<void> cacheCharacter(List<CharacterModel> characters);
-  Future<List<CharacterModel>> loadCacheCharacter();
+  Future<void> cacheCharacters(ApiResponse response, int page);
+  Future<ApiResponse?> loadCacheCharacters(int page);
 }

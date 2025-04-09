@@ -4,6 +4,7 @@ import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
 import 'package:rick_and_morty/domain/models/info_model.dart';
 import 'package:rick_and_morty/features/home/home_vm.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    vm = HomeViewModel(iApi: DiScopeProvider.of(context)!.api);
+    vm = HomeViewModel(repository: DiScopeProvider.of(context)!.iRepository);
     vm.loadPage(vm.currentPage);
     vm.loadFavorites(context);
   }
@@ -91,7 +92,7 @@ class PaginationWidget extends StatelessWidget {
           else
             const SizedBox.shrink(),
           Text('Стр ${vm.currentPage} из ${info.pages}'),
-          if (info.next != null)
+          if (info.next != null && info.pages != vm.currentPage)
             ElevatedButton(
               onPressed: () => vm.loadPage(vm.currentPage + 1),
               child: const Text('Следующая'),
@@ -119,7 +120,11 @@ class CharacterWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        leading: Image.network(character.image),
+        leading: CachedNetworkImage(
+          imageUrl: character.image,
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
         title: Text('Имя : ${character.name}'),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -21,15 +21,13 @@ class FavoriteViewModel with ChangeNotifier {
 
     _favoriteCharacters[index].copyWith(isFavorite: updateCharacter.isFavorite);
 
+    await DiScopeProvider.of(
+      context,
+    )!.iRepository.makeFavoriteOrRemoveCharacter(updateCharacter);
+
     if (updateCharacter.isFavorite) {
-      await DiScopeProvider.of(
-        context,
-      )!.localStorage.saveFavoriteCharacter(updateCharacter);
       _favoriteCharacters.add(updateCharacter);
     } else {
-      await DiScopeProvider.of(
-        context,
-      )!.localStorage.removeFavoriteCharacter(updateCharacter);
       _favoriteCharacters.removeWhere((c) => c.id == updateCharacter.id);
     }
 
