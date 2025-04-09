@@ -3,6 +3,6 @@ import 'package:rick_and_morty/core/storage/i_data_storage.dart';
 
 abstract class IDiScope {
   Future<void> init();
-  IDataStorage get storage;
+  ILocalDataStorage get localStorage;
   IApi get api;
 }

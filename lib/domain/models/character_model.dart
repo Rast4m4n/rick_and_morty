@@ -1,4 +1,6 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'character_model.g.dart';
@@ -13,7 +15,6 @@ class CharacterModel {
     required this.type,
     required this.gender,
     required this.image,
-    required this.episode,
     required this.url,
     required this.created,
     this.isFavorite = false,
@@ -25,15 +26,31 @@ class CharacterModel {
   final String type;
   final String gender;
   final String image;
-  final List<String> episode;
   final String url;
   final DateTime created;
-  final bool? isFavorite;
+  final bool isFavorite;
 
   factory CharacterModel.fromJson(Map<String, dynamic> json) =>
       _$CharacterModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CharacterModelToJson(this);
+  factory CharacterModel.fromMap(Map<String, dynamic> map) {
+    return CharacterModel(
+      id: map['id'] as int,
+      name: map['name'] as String,
+      status: map['status'] as String,
+      species: map['species'] as String,
+      type: map['type'] as String,
+      gender: map['gender'] as String,
+      image: map['image'] as String,
+      url: map['url'] as String,
+      created: DateTime.fromMillisecondsSinceEpoch(map['created'] as int),
+      isFavorite: (map['isFavorite'] as int) == 1,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  Map<String, dynamic> toMap() => _$CharacterModelToJson(this);
 
   CharacterModel copyWith({
     int? id,
@@ -43,7 +60,6 @@ class CharacterModel {
     String? type,
     String? gender,
     String? image,
-    List<String>? episode,
     String? url,
     DateTime? created,
     bool? isFavorite,
@@ -56,32 +72,15 @@ class CharacterModel {
       type: type ?? this.type,
       gender: gender ?? this.gender,
       image: image ?? this.image,
-      episode: episode ?? this.episode,
       url: url ?? this.url,
       created: created ?? this.created,
       isFavorite: isFavorite ?? this.isFavorite,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'name': name,
-      'status': status,
-      'species': species,
-      'type': type,
-      'gender': gender,
-      'image': image,
-      'episode': episode,
-      'url': url,
-      'created': created.millisecondsSinceEpoch,
-      'isFavorite': isFavorite,
-    };
-  }
-
   @override
   String toString() {
-    return 'CharacterModel(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, image: $image, episode: $episode, url: $url, created: $created, isFavorite: $isFavorite)';
+    return 'CharacterModel(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, image: $image, url: $url, created: $created, isFavorite: $isFavorite)';
   }
 
   @override
@@ -95,7 +94,6 @@ class CharacterModel {
         other.type == type &&
         other.gender == gender &&
         other.image == image &&
-        listEquals(other.episode, episode) &&
         other.url == url &&
         other.created == created &&
         other.isFavorite == isFavorite;
@@ -110,7 +108,6 @@ class CharacterModel {
         type.hashCode ^
         gender.hashCode ^
         image.hashCode ^
-        episode.hashCode ^
         url.hashCode ^
         created.hashCode ^
         isFavorite.hashCode;

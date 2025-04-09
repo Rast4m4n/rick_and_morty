@@ -19,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     vm = HomeViewModel(iApi: DiScopeProvider.of(context)!.api);
+    vm.loadPage(vm.currentPage);
+    vm.loadFavorites(context);
   }
 
   @override
@@ -29,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
         listenable: vm,
         builder: (BuildContext context, Widget? child) {
           return FutureBuilder<ApiResponse>(
-            future: vm.character,
+            future: vm.apiResponse,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -40,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
               final apiResponse = snapshot.data!;
               final characters = apiResponse.results;
               final info = apiResponse.info;
-
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemCount: characters.length,
                         itemBuilder: (context, index) {
                           final character = characters[index];
-                          return CharacterWidget(character: character);
+                          return CharacterWidget(character: character, vm: vm);
                         },
                         separatorBuilder: (BuildContext context, int index) {
                           return SizedBox(height: 12);
@@ -104,13 +105,14 @@ class PaginationWidget extends StatelessWidget {
 }
 
 class CharacterWidget extends StatelessWidget {
-  const CharacterWidget({super.key, required this.character});
-
+  const CharacterWidget({super.key, required this.character, required this.vm});
+  final HomeViewModel vm;
   final CharacterModel character;
   @override
   Widget build(BuildContext context) {
     final typeCharacter =
         character.type == "" ? 'Без подтипа' : "Тип: ${character.type}";
+
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(),
@@ -123,7 +125,12 @@ class CharacterWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [Text('Вид : ${character.species}'), Text(typeCharacter)],
         ),
-        trailing: IconButton(onPressed: () {}, icon: Icon(Icons.star)),
+        trailing: IconButton(
+          onPressed: () => vm.doIsFavorite(character, context),
+          icon: Icon(
+            character.isFavorite ? Icons.star : Icons.star_border_outlined,
+          ),
+        ),
       ),
     );
   }

@@ -15,8 +15,6 @@ CharacterModel _$CharacterModelFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       gender: json['gender'] as String,
       image: json['image'] as String,
-      episode:
-          (json['episode'] as List<dynamic>).map((e) => e as String).toList(),
       url: json['url'] as String,
       created: DateTime.parse(json['created'] as String),
       isFavorite: json['isFavorite'] as bool? ?? false,
@@ -31,7 +29,6 @@ Map<String, dynamic> _$CharacterModelToJson(CharacterModel instance) =>
       'type': instance.type,
       'gender': instance.gender,
       'image': instance.image,
-      'episode': instance.episode,
       'url': instance.url,
       'created': instance.created.toIso8601String(),
       'isFavorite': instance.isFavorite,

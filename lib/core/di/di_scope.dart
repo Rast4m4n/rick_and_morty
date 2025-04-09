@@ -7,13 +7,13 @@ import 'package:rick_and_morty/core/storage/shared_pref_storage.dart';
 class DiScope implements IDiScope {
   @override
   Future<void> init() async {
-    _dataStorage = SharedPrefStorage();
+    _localDataStorage = SharedPrefStorage();
     _api = CharacterApi();
   }
 
   @override
-  IDataStorage get storage => _dataStorage;
-  late final IDataStorage _dataStorage;
+  ILocalDataStorage get localStorage => _localDataStorage;
+  late final ILocalDataStorage _localDataStorage;
 
   @override
   IApi get api => _api;
