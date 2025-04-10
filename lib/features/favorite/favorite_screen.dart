@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty/domain/enums/filter_enum.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
 import 'package:rick_and_morty/features/favorite/favorite_vm.dart';
 
@@ -16,7 +17,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Избранные')),
+      appBar: AppBar(
+        title: const Text('Избранные'),
+        actions: [FilterDropDownButton(vm: vm), const SizedBox(width: 8)],
+      ),
       body: ListenableBuilder(
         listenable: vm,
         builder: (BuildContext context, Widget? child) {
@@ -89,6 +93,92 @@ class CharacterWidget extends StatelessWidget {
             character.isFavorite ? Icons.star : Icons.star_border_outlined,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class FilterDropDownButton extends StatelessWidget {
+  const FilterDropDownButton({super.key, required this.vm});
+
+  final FavoriteViewModel vm;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: Icon(Icons.tune),
+      itemBuilder: (context) {
+        return [
+          _buildFilterDropdown<CharacterStatus>(
+            title: 'Статус',
+            valueEnum: vm.selectedStatus,
+            valuesEnum: CharacterStatus.values,
+            onChanged: (value) {
+              vm.setStatusFilter(value);
+              Navigator.pop(context);
+            },
+            valueEnumAll: CharacterStatus.all,
+          ),
+          _buildFilterDropdown<CharacterGender>(
+            title: 'Пол',
+            valueEnum: vm.selectedGender,
+            valuesEnum: CharacterGender.values,
+            onChanged: (value) {
+              vm.setGenderFilter(value);
+              Navigator.pop(context);
+            },
+            valueEnumAll: CharacterGender.all,
+          ),
+          _buildFilterDropdown<CharacterSpecies>(
+            title: 'Разновидность',
+            valueEnum: vm.selectedSpecies,
+            valuesEnum: CharacterSpecies.values,
+            onChanged: (value) {
+              vm.setSpeciesFilter(value);
+              Navigator.pop(context);
+            },
+            valueEnumAll: CharacterSpecies.all,
+          ),
+
+          PopupMenuItem(
+            child: TextButton(
+              onPressed: () {
+                vm.clearFilters();
+                Navigator.pop(context);
+              },
+              child: const Text('Сбросить фильтры'),
+            ),
+          ),
+        ];
+      },
+    );
+  }
+
+  PopupMenuEntry<dynamic> _buildFilterDropdown<T extends Enum>({
+    required String title,
+    required T? valueEnum,
+    required List<T> valuesEnum,
+    required Function(T?) onChanged,
+    required T? valueEnumAll,
+  }) {
+    return PopupMenuItem(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title),
+          DropdownButton<T?>(
+            value: valueEnum,
+            isExpanded: true,
+            items:
+                valuesEnum.map((item) {
+                  return DropdownMenuItem<T?>(
+                    value: item == valueEnumAll ? null : item,
+                    child: Text(item.name),
+                  );
+                }).toList(),
+            onChanged: onChanged,
+          ),
+        ],
       ),
     );
   }
