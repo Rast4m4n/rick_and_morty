@@ -21,6 +21,8 @@ class HomeViewModel with ChangeNotifier {
 
   void loadPage(int page) {
     currentPage = page;
+    // Подгружаю данные с api, затем подменяю элементы в списке,
+    // которые были сохранены в избранные
     apiResponse = repository.getCharacter(page: currentPage).then((response) {
       final updateResonse =
           response.results.map((character) {

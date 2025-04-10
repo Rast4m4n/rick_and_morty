@@ -4,7 +4,7 @@ import 'package:rick_and_morty/core/di/di_scope.dart';
 import 'package:rick_and_morty/core/di/di_scope_provider.dart';
 import 'package:rick_and_morty/core/di/i_di_scope.dart';
 
-abstract class IAppBuilder {
+abstract interface class IAppBuilder {
   /// Метод сборки приложения
   Future<Widget> build();
 

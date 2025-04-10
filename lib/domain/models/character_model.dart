@@ -82,34 +82,4 @@ class CharacterModel {
   String toString() {
     return 'CharacterModel(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, image: $image, url: $url, created: $created, isFavorite: $isFavorite)';
   }
-
-  @override
-  bool operator ==(covariant CharacterModel other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.name == name &&
-        other.status == status &&
-        other.species == species &&
-        other.type == type &&
-        other.gender == gender &&
-        other.image == image &&
-        other.url == url &&
-        other.created == created &&
-        other.isFavorite == isFavorite;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        name.hashCode ^
-        status.hashCode ^
-        species.hashCode ^
-        type.hashCode ^
-        gender.hashCode ^
-        image.hashCode ^
-        url.hashCode ^
-        created.hashCode ^
-        isFavorite.hashCode;
-  }
 }

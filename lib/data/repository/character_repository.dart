@@ -23,6 +23,9 @@ class CharacterRepository implements IRepository {
   final IDataStorage _iDbStorage;
   final IDataStorage _iLocalStorage;
 
+  /// Получаю api и кешируем данные.
+  /// Если нет доступа к сети выводит
+  /// данные из кеша
   @override
   Future<ApiResponse> getCharacter({int page = 1}) async {
     try {

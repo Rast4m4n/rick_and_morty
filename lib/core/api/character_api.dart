@@ -11,6 +11,14 @@ class CharacterApi implements IApi {
       '${IApi.baseUrl}/character',
       queryParameters: {'page': page},
     );
-    return ApiResponse.fromJson(response.data);
+    if (response.statusCode == 200) {
+      return ApiResponse.fromJson(response.data);
+    } else {
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        error: 'Ошибка загрузки персонажей: Статус - ${response.statusCode}',
+      );
+    }
   }
 }
