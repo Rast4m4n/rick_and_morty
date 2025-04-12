@@ -38,7 +38,6 @@ class HomeViewModel with ChangeNotifier {
         connectivity.contains(ConnectivityResult.wifi) ||
         connectivity.contains(ConnectivityResult.mobile);
 
-    print(isOnline);
     // Подгружаю данные с api, затем подменяю элементы в списке,
     // которые были сохранены в избранные
     apiResponse = repository

@@ -142,7 +142,32 @@ class CharacterWidget extends StatelessWidget {
             character.isFavorite ? Icons.star : Icons.star_border_outlined,
           ),
         ),
+        onTap: () => fullViewInfoCharacter(context, typeCharacter),
       ),
+    );
+  }
+
+  Future<dynamic> fullViewInfoCharacter(
+    BuildContext context,
+    String typeCharacter,
+  ) {
+    return showDialog(
+      context: context,
+      builder:
+          (context) => Dialog(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                CachedNetworkImage(imageUrl: character.image),
+                Text('Имя: ${character.name}'),
+                Text('Пол: ${character.gender}'),
+                Text('Вид: ${character.species}'),
+                Text(typeCharacter),
+                Text('Статус жизни: ${character.status}'),
+              ],
+            ),
+          ),
     );
   }
 }
