@@ -78,7 +78,7 @@ class FavoriteViewModel with ChangeNotifier {
 
     await DiScopeProvider.of(
       context,
-    )!.iRepository.makeFavoriteOrRemoveCharacter(updateCharacter);
+    )!.repository.makeFavoriteOrRemoveCharacter(updateCharacter);
 
     if (updateCharacter.isFavorite) {
       _favoriteCharacters.add(updateCharacter);

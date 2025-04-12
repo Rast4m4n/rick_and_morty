@@ -7,5 +7,5 @@ abstract interface class IDiScope {
   IDataStorage get localStorage;
   IDataStorage get dbStorage;
   IApi get api;
-  IRepository get iRepository;
+  IRepository get repository;
 }

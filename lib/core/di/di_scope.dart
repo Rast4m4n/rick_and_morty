@@ -34,6 +34,6 @@ class DiScope implements IDiScope {
   late final IApi _api;
 
   @override
-  IRepository get iRepository => _iRepository;
+  IRepository get repository => _iRepository;
   late final IRepository _iRepository;
 }

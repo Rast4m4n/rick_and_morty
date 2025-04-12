@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rick_and_morty/core/storage/i_data_storage.dart';
 import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
@@ -20,7 +21,7 @@ class SqlDatabase implements IDataStorage {
   @override
   Future<Database> init() async {
     return await openDatabase(
-      join(await getDatabasesPath(), _databaseName),
+      join((await getApplicationCacheDirectory()).path, _databaseName),
       version: _databaseVersion,
       onOpen: (db) {},
       onCreate: (db, version) async {

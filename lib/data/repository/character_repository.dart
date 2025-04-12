@@ -5,7 +5,12 @@ import 'package:rick_and_morty/domain/models/api_response.dart';
 import 'package:rick_and_morty/domain/models/character_model.dart';
 
 abstract interface class IRepository {
-  Future<ApiResponse> getCharacter({int page = 1});
+  Future<ApiResponse> getCharacter({
+    int page = 1,
+    String? species,
+    String? status,
+    String? gender,
+  });
   Future<void> makeFavoriteOrRemoveCharacter(CharacterModel character);
   Future<List<CharacterModel>> getFavoriteCharacters();
 }
@@ -27,14 +32,26 @@ class CharacterRepository implements IRepository {
   /// Если нет доступа к сети выводит
   /// данные из кеша
   @override
-  Future<ApiResponse> getCharacter({int page = 1}) async {
+  Future<ApiResponse> getCharacter({
+    int page = 1,
+    String? species,
+    String? status,
+    String? gender,
+  }) async {
     try {
-      final api = await _iApi.getCharacter(page: page);
+      final api = await _iApi.getCharacter(
+        page: page,
+        species: species,
+        status: status,
+        gender: gender,
+      );
       await _iDbStorage.cacheCharacters(api, page);
       return api;
     } on DioException catch (e) {
       final cached = await _iDbStorage.loadCacheCharacters(page);
-      if (cached != null) return cached;
+      if (cached != null) {
+        return cached;
+      }
       throw Exception('Ошибка загрузки персонажей из кеша: $e');
     }
   }
